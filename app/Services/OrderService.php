@@ -18,7 +18,7 @@ class OrderService
         $order = Order::find($id);
 
         if (!$order) {
-            throw new Exception('Order not found');
+            throw new Exception(__('order_messages.order_not_found'));
         }
 
         $order->user_id = $orderDTO->getUserId();
@@ -34,7 +34,7 @@ class OrderService
         $order = Order::find($id);
 
         if (!$order) {
-            throw new Exception('Product not found');
+            throw new Exception(__('order_messages.order_not_found'));
         }
 
         $order->delete();

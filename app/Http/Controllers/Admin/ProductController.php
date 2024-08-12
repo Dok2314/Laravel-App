@@ -31,7 +31,7 @@ class ProductController extends Controller
 
         $product = $this->productService->createProduct($productDTO);
 
-        return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
+        return response()->json(['message' => __('product_messages.product_created'), 'product' => $product], 201);
     }
 
     public function update($id, UpdateRequest $request)
@@ -43,7 +43,7 @@ class ProductController extends Controller
 
             $product = $this->productService->updateProduct($id, $productDTO);
 
-            return response()->json(['message' => 'Product updated successfully', 'product' => $product]);
+            return response()->json(['message' => __('product_messages.product_updated'), 'product' => $product]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }
@@ -54,7 +54,7 @@ class ProductController extends Controller
         try {
             $this->productService->deleteProduct($id);
 
-            return response()->json(['message' => 'Product deleted successfully']);
+            return response()->json(['message' => __('product_messages.product_deleted')]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }

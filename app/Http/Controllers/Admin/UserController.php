@@ -32,7 +32,7 @@ class UserController extends Controller
 
         $user = $this->userService->createUser($userDTO);
 
-        return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+        return response()->json(['message' => __('user_messages.user_created'), 'user' => $user], 201);
     }
 
     public function update($id, UpdateRequest $request)
@@ -44,7 +44,7 @@ class UserController extends Controller
 
             $user = $this->userService->updateUser($id, $userDTO);
 
-            return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+            return response()->json(['message' => __('user_messages.user_updated'), 'user' => $user]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }
@@ -55,7 +55,7 @@ class UserController extends Controller
         try {
             $this->userService->deleteUser($id);
 
-            return response()->json(['message' => 'User deleted successfully']);
+            return response()->json(['message' => __('user_messages.user_deleted')]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }

@@ -21,7 +21,7 @@ class AuthController extends Controller
         $data = $request->validated();
         $userDTO = UserDTO::fromArray($data);
 
-        $user = $this->userService->createUser($userDTO);
+        $user = $this->userService->createUser($userDTO, 'admin');
 
         $token = JWTAuth::fromUser($user);
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => __('auth.unauthorized')], 401);
         }
 
         return response()->json(['token' => $token]);

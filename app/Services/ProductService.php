@@ -18,7 +18,7 @@ class ProductService
         $product = Product::find($id);
 
         if (!$product) {
-            throw new Exception('Product not found');
+            throw new Exception(__('product_messages.product_not_found'));
         }
 
         $product->name = $productDTO->getName();
@@ -34,7 +34,7 @@ class ProductService
         $product = Product::find($id);
 
         if (!$product) {
-            throw new Exception('Product not found');
+            throw new Exception(__('product_messages.product_not_found'));
         }
 
         $product->delete();

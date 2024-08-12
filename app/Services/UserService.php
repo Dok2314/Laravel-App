@@ -11,16 +11,16 @@ use Exception;
 
 class UserService
 {
-    public function createUser(UserDTO $userDTO): User
+    public function createUser(UserDTO $userDTO, $roleName = 'client'): User
     {
         $user = User::create($userDTO->toArray());
 
-        $clientRole = Role::where('name', 'client')->first();
+        $clientRole = Role::where('name', $roleName)->first();
 
         if ($clientRole) {
             $user->roles()->attach($clientRole->id);
         } else {
-            throw new Exception('Client role not found');
+            throw new Exception(__('role_messages.client_not_found'));
         }
 
         return $user;
@@ -31,7 +31,7 @@ class UserService
         $user = User::find($id);
 
         if (!$user) {
-            throw new Exception('User not found');
+            throw new Exception(__('user_messages.user_not_found'));
         }
 
         $user->name = $userDTO->getName();
@@ -49,7 +49,7 @@ class UserService
         $user = User::find($id);
 
         if (!$user) {
-            throw new Exception('User not found');
+            throw new Exception(__('user_messages.user_not_found'));
         }
 
         $user->delete();
@@ -60,15 +60,15 @@ class UserService
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => __('user_messages.user_not_found')], 404);
         }
 
         $adminRole = Role::where('name', 'admin')->first();
         if ($adminRole) {
             $user->roles()->syncWithoutDetaching([$adminRole->id]);
-            return response()->json(['message' => 'User role updated to admin']);
+            return response()->json(['message' => __('role_messages.role_updated')]);
         }
 
-        return response()->json(['message' => 'Admin role not found'], 404);
+        return response()->json(['message' => __('role_messages.role_admin_not_found')], 404);
     }
 }

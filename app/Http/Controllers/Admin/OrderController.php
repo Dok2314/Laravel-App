@@ -31,7 +31,7 @@ class OrderController extends Controller
 
         $order = $this->orderService->createOrder($orderDTO);
 
-        return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
+        return response()->json(['message' => __('order_messages.order_created'), 'order' => $order], 201);
     }
 
     public function update($id, UpdateRequest $request)
@@ -43,7 +43,7 @@ class OrderController extends Controller
 
             $order = $this->orderService->updateOrder($id, $orderDTO);
 
-            return response()->json(['message' => 'Order updated successfully', 'order' => $order]);
+            return response()->json(['message' => __('order_messages.order_updated'), 'order' => $order]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }
@@ -54,7 +54,7 @@ class OrderController extends Controller
         try {
             $this->orderService->deleteOrder($id);
 
-            return response()->json(['message' => 'Order deleted successfully']);
+            return response()->json(['message' => __('order_messages.order_deleted')]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }

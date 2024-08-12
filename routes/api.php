@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\LocalizationMiddleware;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -21,7 +22,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('orders', [ClientOrderController::class, 'store']);
 });
 
-Route::group(['auth:api',], function () {
+Route::group(['auth:api', 'middleware' => [AdminMiddleware::class, LocalizationMiddleware::class]], function () {
     Route::prefix('admin')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::get('/', [AdminOrderController::class, 'index']);
@@ -55,4 +56,4 @@ Route::group(['auth:api',], function () {
             });
         });
     });
-})->middleware(AdminMiddleware::class);
+});
