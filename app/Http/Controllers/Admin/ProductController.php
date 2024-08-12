@@ -9,6 +9,7 @@ use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Exception;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -17,11 +18,19 @@ class ProductController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::paginate(10);
+        $perPage = $request->input('per_page', 10);
+
+        if (!is_numeric($perPage) || $perPage <= 0) {
+            return response()->json(['message' => __('validation_messages.per_page')], 400);
+        }
+
+        $products = Product::paginate((int)$perPage);
+
         return response()->json($products);
     }
+
 
     public function store(StoreRequest $request)
     {

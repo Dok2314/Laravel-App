@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\DTO\OrderDTO;
 use App\Services\OrderService;
 use Exception;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -17,9 +18,16 @@ class OrderController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::paginate(10);
+        $perPage = $request->input('per_page', 10);
+
+        if (!is_numeric($perPage) || $perPage <= 0) {
+            return response()->json(['message' => __('validation_messages.per_page')], 400);
+        }
+
+        $orders = Order::paginate((int)$perPage);
+
         return response()->json($orders);
     }
 

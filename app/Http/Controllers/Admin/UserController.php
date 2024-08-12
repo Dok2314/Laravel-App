@@ -10,6 +10,7 @@ use App\Models\User;
 use App\DTO\UserDTO;
 use App\Services\UserService;
 use Exception;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -18,9 +19,16 @@ class UserController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(10);
+        $perPage = $request->input('per_page', 10);
+
+        if (!is_numeric($perPage) || $perPage <= 0) {
+            return response()->json(['message' => __('validation_messages.per_page')], 400);
+        }
+
+        $users = User::paginate((int)$perPage);
+
         return response()->json($users);
     }
 
