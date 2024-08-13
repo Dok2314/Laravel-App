@@ -16,7 +16,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Invalid per_page value'], 400);
         }
 
-        $products = Product::paginate((int)$perPage);
+        $products = Product::orderBy('created_at', 'desc')->paginate((int)$perPage);
 
         return response()->json($products);
     }

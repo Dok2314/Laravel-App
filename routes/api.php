@@ -14,7 +14,8 @@ use App\Http\Middleware\LocalizationMiddleware;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->group(function () {
+//'auth:api'
+Route::group([], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -27,7 +28,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('orders', [ClientOrderController::class, 'store']);
 });
 
-Route::group(['auth:api', 'middleware' => [AdminMiddleware::class, LocalizationMiddleware::class]], function () {
+//'auth:api',
+//AdminMiddleware::class,
+Route::group(['middleware' => [LocalizationMiddleware::class]], function () {
     Route::prefix('admin')->group(function () {
         Route::prefix('orders')->group(function () {
             Route::get('/', [AdminOrderController::class, 'index']);
