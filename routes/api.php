@@ -6,6 +6,7 @@ use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\LocalizationMiddleware;
@@ -14,6 +15,10 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('/me', function (Request $request) {
+        return $request->user();
+    });
+
     Route::prefix('products')->group(function () {
         Route::get('/', [ClientProductController::class, 'index']);
         Route::get('{id}', [ClientProductController::class, 'show']);
