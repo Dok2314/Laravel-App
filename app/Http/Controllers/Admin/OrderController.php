@@ -8,13 +8,14 @@ use App\Http\Requests\Order\UpdateRequest;
 use App\Models\Order;
 use App\DTO\OrderDTO;
 use App\Services\OrderService;
+use App\Http\Resources\OrderResource;
 use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function __construct(
-      private readonly OrderService $orderService
+        private readonly OrderService $orderService
     ) {
     }
 
@@ -26,9 +27,9 @@ class OrderController extends Controller
             return response()->json(['message' => __('validation_messages.per_page')], 400);
         }
 
-        $orders = Order::paginate((int)$perPage);
+        $orders = Order::with(['product', 'user'])->paginate((int)$perPage);
 
-        return response()->json($orders);
+        return OrderResource::collection($orders);
     }
 
     public function store(StoreRequest $request)
@@ -39,7 +40,7 @@ class OrderController extends Controller
 
         $order = $this->orderService->createOrder($orderDTO);
 
-        return response()->json(['message' => __('order_messages.order_created'), 'order' => $order], 201);
+        return new OrderResource($order);
     }
 
     public function update($id, UpdateRequest $request)
@@ -51,7 +52,7 @@ class OrderController extends Controller
 
             $order = $this->orderService->updateOrder($id, $orderDTO);
 
-            return response()->json(['message' => __('order_messages.order_updated'), 'order' => $order]);
+            return new OrderResource($order);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);
         }
